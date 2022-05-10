@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Taskbar from './Taskbar'
+import allToDo from './allToDo'
 class App extends Component {
   constructor(props){
     super(props)
@@ -9,8 +10,10 @@ class App extends Component {
       taskId: 0,
       toDoTasks: [],
       priorityColor: '',
-      edit: true,
+      edit: false,
+      taskedit: '',
     }
+    this.getEdit = this.getEdit.bind(this)
     this.getData = this.getData.bind(this)
     this.getAdd = this.getAdd.bind(this)
     }
@@ -35,23 +38,53 @@ priorityColor="medPriority"
 priorityColor="highPriority"
   }
 
- let singleTask = ({ taskBody: `${this.state.task}`, taskPriority: `${this.state.priority}`, prioritycss: priorityColor, edit: `${this.state.edit}`});
+ let singleTask = ({ taskBody: `${this.state.task}`, taskPriority: `${this.state.priority}`, prioritycss: priorityColor, edit: this.state.edit});
  console.log(singleTask)
  let array = this.state.toDoTasks.concat(singleTask)
  this.setState({
   toDoTasks: array,
-  })  
-  getEdit()
+  })}
+
+  getEdit(index)
   { 
-    this.setState({ edit: true })
+    let editArray = [...this.state.toDoTasks];
+editArray[index].edit = !editArray[index].edit
+
+    console.log('get edit working')
+    this.setState({ 
+      toDoTasks: editArray
+    })
     
   }
-  getEditSave()
+    getSave(index)
   { 
-    this.setState({ edit: false })
+    let editArray = [...this.state.toDoTasks];
+editArray[index].edit = !editArray[index].edit
+
+    console.log('get save working')
+    this.setState({ 
+      toDoTasks: editArray
+    })
     
   }
+  
+
+
+
+
+
+  getText(event){
+  // let onChangeArray = [...this.state.toDoTasks];
+  // onChangeArray[index].taskBody = index.taskBody.value
+
+  this.setState({
+    [event.target.name]: (event.target.value)
+   })
+  
   }
+  
+
+  
 
 
   render() {
@@ -87,14 +120,17 @@ priorityColor="highPriority"
               <div className="dropdown-divider pt-1 pb-1 mb-2"></div>
 
               <div className="container">
-              <pre>
-    {this.state.toDoTasks.map(toDoTask => (
+                       <pre>
+    {this.state.toDoTasks.map((toDoTask,i) => (
 		<Taskbar
-      // taskId={toDoTask.taskId}
+      key={i}
+      id={i}
       taskPriority={toDoTask.taskPriority}
       taskBody={toDoTask.taskBody}
       prioritycss={toDoTask.prioritycss}
       edit={toDoTask.edit}
+      getEdit={this.getEdit}
+      getText={this.getText}
 		/>
 	))
 }
