@@ -156,17 +156,19 @@ eraseText() {
               <div className="dropdown-divider pt-1 pb-1 mb-2"></div>
 
               <div className="container">
-                       <pre>	<ul className="ms-0" style={{listStyle: "none"}}>
+  	<ul className="no-padding" style={{listStyle: "none"}}>
     {this.state.Tasks.map((task,i) => (
 
-  <li key={i} className={`rounded-pill ${task.priorityCss}`}>
+  <li key={i} className={`rounded-pill m-1 ${task.priorityCss}`}>
    
 {task.edit ?  
 <div>
-<p className="card-text col-9 text-wrap fs-6">Edit mode </p>
-
-<label className="pt-3" for="floatingText">Edit Mode</label>
+<div className='row'>
+<div className='col-2'></div>
+<div className='col-8'>
+<label className="pt-3" for="floatingText">Edit</label>
   <textarea className="form-control update-todo-text" placeholder="Comments..." id="floatingTextEdit" style={{height: "100px"}} name="editbody" defaultValue={task.body} onChange={this.getData}></textarea>
+
   <label className="pt-3" for="prioritycheck">How much of a priority is this?</label>
   <select className="form-select mb-2" aria-label="Default select example" id="prioritycheckEdit" name="editpriority" defaultValue={task.priority} onChange={this.getData}>
   <option selected>Select a priority</option>
@@ -175,7 +177,8 @@ eraseText() {
   <option value="3">High</option>
     </select>
 <button type="button" className="btn btn-success btn-lg mt-1 mb-3 update-todo" onClick={()=>this.getSave(i)}>Save</button>
-
+</div>
+  <div className='col-1'></div></div>
 </div>
 
 :
@@ -197,7 +200,7 @@ eraseText() {
 </div> 
 
 <div className='col-2'>
-<button type="button" className="btn btn-secondary ms-4 m-1 edit-todo" onClick={()=>this.getEdit(i)}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
+<button type="button" className="btn btn-secondary ms-2 m-1 edit-todo" onClick={()=>this.getEdit(i)}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
   <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
   <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
 </svg></button> 
@@ -210,7 +213,7 @@ eraseText() {
 </li>
 
 ))}
-	</ul></pre>
+	</ul>
 
               </div>
               </div>
