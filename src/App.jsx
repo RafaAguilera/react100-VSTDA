@@ -37,7 +37,7 @@ getData(event)
     let priorityColor;
 
     if (`${this.state.priority}` == 1){
-priorityColor="lowPriority"
+priorityColor="lowPriority success"
   }else if (`${this.state.priority}` == 2){
 priorityColor="medPriority"
   }else if (`${this.state.priority}` == 3){
@@ -50,7 +50,9 @@ priorityColor="highPriority"
  let array = this.state.Tasks.concat(singleTask)
  this.setState({
   Tasks: array,
-  })}
+  })
+this.eraseText()
+}
 
   getEdit(index)
   { 
@@ -80,7 +82,7 @@ crossedArray[index].crossout = !crossedArray[index].crossout
     let priorityColor;
 
     if (`${this.state.editpriority}` == 1){
-priorityColor="lowPriority"
+priorityColor="lowPriority success"
   }else if (`${this.state.editpriority}` == 2){
 priorityColor="medPriority"
   }else if (`${this.state.editpriority}` == 3){
@@ -111,6 +113,14 @@ console.log("this was deleted",deletedobject)
    })
   
   }
+eraseText() {
+    document.getElementById("floatingText").value = "";
+    document.getElementById("prioritycheck").value = "default";   
+    this.setState({ 
+      body: "",
+      priority: ""
+    })
+}
   
 
     render() {
@@ -128,16 +138,16 @@ console.log("this was deleted",deletedobject)
                 <form>
                 <div className="dropdown-divider pt-1 pb-1"></div>
                 <label className="pt-3" for="floatingText">I want to ...</label>
-                  <textarea className="form-control" placeholder="Comments..." id="floatingText" style={{height: "100px"}} name="body" onChange={this.getData}></textarea>
+                  <textarea className="form-control create-todo-text" placeholder="Comments..." id="floatingText" style={{height: "100px"}} name="body" onChange={this.getData}></textarea>
             <span></span><span></span>
                 <label className="pt-3" for="prioritycheck">How much of a priority is this?</label>
-                  <select className="form-select mb-2" aria-label="Default select example" id="prioritycheck" name="priority" onChange={this.getData}>
-                    <option selected>Select a priority</option>
+                  <select className="form-select mb-2 create-todo-priority" aria-label="Default select example" id="prioritycheck" name="priority" onChange={this.getData}>
+                    <option selected value="default">Select a priority</option>
                     <option value="1">Low</option>
                     <option value="2">Medium</option>
                     <option value="3">High</option>
                   </select>
-                <button type="button" className="btn btn-success btn-lg mt-1 mb-3" onClick={this.getAdd}>Add Todo</button>
+                <button type="button" className="btn btn-success btn-lg mt-1 mb-3 create-todo" onClick={this.getAdd}>Add Todo</button>
               </form>
 
               </div>
@@ -146,57 +156,61 @@ console.log("this was deleted",deletedobject)
               <div className="dropdown-divider pt-1 pb-1 mb-2"></div>
 
               <div className="container">
-                       <pre>
+                       <pre>	<ul className="ms-0" style={{listStyle: "none"}}>
     {this.state.Tasks.map((task,i) => (
-	<div key={i}>
+
+  <li key={i} className={`rounded-pill ${task.priorityCss}`}>
    
 {task.edit ?  
 <div>
 <p className="card-text col-9 text-wrap fs-6">Edit mode </p>
 
 <label className="pt-3" for="floatingText">Edit Mode</label>
-  <textarea className="form-control" placeholder="Comments..." id="floatingText" style={{height: "100px"}} name="editbody" defaultValue={task.body} onChange={this.getData}></textarea>
+  <textarea className="form-control update-todo-text" placeholder="Comments..." id="floatingTextEdit" style={{height: "100px"}} name="editbody" defaultValue={task.body} onChange={this.getData}></textarea>
   <label className="pt-3" for="prioritycheck">How much of a priority is this?</label>
-  <select className="form-select mb-2" aria-label="Default select example" id="prioritycheck" name="editpriority" defaultValue={task.priority} onChange={this.getData}>
+  <select className="form-select mb-2" aria-label="Default select example" id="prioritycheckEdit" name="editpriority" defaultValue={task.priority} onChange={this.getData}>
   <option selected>Select a priority</option>
   <option value="1">Low</option>
   <option value="2">Medium</option>
   <option value="3">High</option>
     </select>
-<button type="button" className="btn btn-success btn-lg mt-1 mb-3" onClick={()=>this.getSave(i)}>Save</button>
+<button type="button" className="btn btn-success btn-lg mt-1 mb-3 update-todo" onClick={()=>this.getSave(i)}>Save</button>
 
 </div>
 
 :
 
 
-<div className={`card-group container ${task.priorityCss}`} >
+<div className={`card-group container rounded-pill ${task.priorityCss}`} >
 <div className='col-1'>
 
 <div className="form-check form-switch">
-  <input className="form-check-input" type="checkbox" id="mySwitch" name="crossout" value= "1"  onClick={()=>this.getCrossed(i)}/>
+  <input className="form-check-input mt-3" type="checkbox" id="mySwitch" name="crossout" value= "1"  onClick={()=>this.getCrossed(i)}/>
 </div>
  </div>
 <div className='col-9'>  
 {task.crossout ?
-  <p className="card-text text-decoration-line-through text-wrap fs-6">{task.body}</p>
+  <p className="card-text text-decoration-line-through fw-light text-wrap fs-5 mt-2">{task.body}</p>
 : 
-  <p className="card-text text-wrap fs-6">{task.body}</p>
+  <p className="card-text text-wrap fw-light fs-5 mt-2">{task.body}</p>
 } 
 </div> 
 
 <div className='col-2'>
-<button type="button" className="btn btn-secondary" onClick={()=>this.getEdit(i)}>Edit</button> 
+<button type="button" className="btn btn-secondary ms-4 m-1 edit-todo" onClick={()=>this.getEdit(i)}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
+  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+</svg></button> 
 
-<button type="button" className="btn btn-danger" onClick={()=>this.getDelete(i)}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash-fill" viewBox="0 0 16 16">
+<button type="button" className="btn btn-danger delete-todo" onClick={()=>this.getDelete(i)}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash-fill" viewBox="0 0 16 16">
   <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
 </svg></button>
 </div>
 </div>} 
-</div>
-	
+</li>
+
 ))}
-</pre>
+	</ul></pre>
 
               </div>
               </div>
